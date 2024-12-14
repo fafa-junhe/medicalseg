@@ -1,0 +1,42 @@
+@import "../node_modules/@flaticon/flaticon-uicons/css/all/all";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+@media print {
+    body *:not(.printable, .printable *) {
+        display: none;
+    }
+    .printable {
+        -webkit-print-color-adjust: exact !important; /*Chrome, Safari */
+        color-adjust: exact !important;  /*Firefox*/
+    }
+    .printable .sticky{
+        display: none;
+    }
+    .printable .notprintable{
+        display: none;
+    }
+}
+textarea {
+    resize: none;
+  }
+td{
+    text-align: center;
+}
+th{
+    text-align: center;
+}
+.view-tab{
+    @apply mx-6 my-6 px-6 py-6 border-2 border-gray-500 bg-base-200 drop-shadow-2xl;
+}
+
+.input-patient{
+    @apply border border-slate-600 border-solid input inline-block;
+}
+.active-filter{
+    @apply top-1 align-middle transition-all z-auto inline absolute text-lg rounded-md bg-pink-600;
+}

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html data-theme="light" lang="zh-cn">
+
+<head>
+  <title>医疗数据解析平台</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="./style.css" rel="stylesheet" />
+  <script type="module" src="js/index.js"></script>
+</head>
+
+<body>
+  <div id="windows-data-info"
+    class="min-w-[30vw] min-h-[30vh] hidden mockup-windows z-40 shadow-2xl absolute border border-blue-500 bg-base-300">
+    <div class="select-none mockup-window-title bg-blue-500 h-10">
+      <div class="flex">
+        <h2 class="text-lg text-white self-end">
+          <i class="fi fi-rr-stats m-3"></i>查看影像
+        </h2>
+        <div class="text-white flex justify-end flex-1">
+          <div class="mockup-window-mini align-bottom btn btn-sm w-12 btn-ghost rounded-none">
+            <span class="font-thin text-2xl -scale-x-150">-</span>
+          </div>
+          <div class="mockup-window-max align-bottom btn btn-sm w-12 btn-ghost rounded-none">
+            <span class="font-thin -scale-x-150">🞐</span>
+          </div>
+          <div class="mockup-window-close align-bottom btn btn-sm hover:bg-red-500 w-12 btn-ghost rounded-none">
+            <span class="font-thin -scale-x-150">x</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-base-100 h-16 shadow-xl">
+      <ul class="absolute menu lg:menu-horizontal bg-base-200 rounded-box lg:mb-64">
+        <li>
+          <details>
+            <summary>文件</summary>
+            <ul>
+              <li><a id="btn-download-label">下载标签</a></li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>编辑</summary>
+            <ul>
+              <li><a id="btn-undo">撤销</a></li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>画笔</summary>
+            <ul id="tab-draw">
+              <li>
+                <a id="checkbox-draw-fill">填充区域<i class="fi fi-br-check"></i></a>
+              </li>
+              <li>
+                <a class="active:bg-[unset!important] active:text-[unset!important]">透明度<br /><input
+                    id="range-draw-alpha" type="range" min="0" max="100" value="40" class="range" /></a>
+              </li>
+              <div class="5 m-0 w-36 divider"></div>
+              <li>
+                <a value="-1" class="border-gray-700 border-b-4">关闭<i class="fi fi-br-check"></i></a>
+              </li>
+              <li><a value="0" class="border-red-800 border-b-4">擦除</a></li>
+              <li>
+                <a value="-0" class="border-red-800 border-b-4">擦除区块</a>
+              </li>
+
+              <li>
+                <a value="1" class="border-[#001498] border-b-4">脾脏</a>
+              </li>
+              <li>
+                <a value="2" class="border-[#B96653] border-b-4">右肾</a>
+              </li>
+              <li>
+                <a value="3" class="border-[#B96653] border-b-4">左肾</a>
+              </li>
+              <li>
+                <a value="4" class="border-[#FC0000] border-b-4">胆囊</a>
+              </li>
+              <li>
+                <a value="5" class="border-[#00FF47] border-b-4">食道</a>
+              </li>
+              <li>
+                <a value="6" class="border-[#674C69] border-b-4">肝脏</a>
+              </li>
+
+              <li><a value="7" class="border-[#D8847F] border-b-4">胃</a></li>
+
+              <li>
+                <a value="8" class="border-[#7F007F] border-b-4">主动脉</a>
+              </li>
+
+              <li>
+                <a value="9" class="border-[#7F7F00] border-b-4">下腔静脉</a>
+              </li>
+              <li>
+                <a value="10" class="border-[#00FFFF] border-b-4">胰腺</a>
+              </li>
+              <li>
+                <a value="11" class="border-[#FF9A84] border-b-4">膀胱</a>
+              </li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>查看</summary>
+            <ul id="tab-view">
+              <li>
+                <a value="0" class="border-gray-700 border-b-4">透明背景</a>
+              </li>
+              <li>
+                <a value="1" class="border-gray-700 border-b-4">三视图 + 3D<i class="fi fi-br-check"></i></a>
+              </li>
+              <li>
+                <a value="2" class="border-gray-700 border-b-4">三视图</a>
+              </li>
+              <li>
+                <a value="3" class="border-gray-700 border-b-4">冠状面</a>
+              </li>
+              <li>
+                <a value="4" class="border-gray-700 border-b-4">轴向面</a>
+              </li>
+              <li>
+                <a value="5" class="border-gray-700 border-b-4">矢状面</a>
+              </li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>右键功能</summary>
+            <ul id="tab-right-click">
+              <li>
+                <a value="0" class="border-gray-700 border-b-4">窗宽窗位调整<i class="fi fi-br-check"></i></a>
+              </li>
+              <li>
+                <a value="1" class="border-gray-700 border-b-4">缩放/平移</a>
+              </li>
+              <li>
+                <a value="2" class="border-gray-700 border-b-4">测量</a>
+              </li>
+              <li>
+                <a value="3" class="border-gray-700 border-b-4">无</a>
+              </li>
+            </ul>
+          </details>
+        </li>
+          <label for="showCt">
+              <li><span>显示CT</span></li>
+          </label>
+        <input id="showCt" class="self-center checkbox" type="checkbox" checked/>
+        <label for="showLabel">
+            <li><span>显示标签</span></li>
+        </label>
+        <input id="showLabel" class="self-center checkbox" type="checkbox" checked/>
+      </ul>
+      
+      <div class="h-20">
+        <label>
+          <div class="rounded-lg border-4 border-success bg-success text-center align-middle absolute right-3"
+            id="location">
+            0x0x0 = 0 背景
+          </div>
+      </div>
+    </div>
+    <div class="flex">
+      <div class="flex-1">
+        <canvas id="gl" style="width: 100%; height: 100%"></canvas>
+      </div>
+    </div>
+  </div>
+  <div id="windows-patient-info"
+    class="border-blue-500 mockup-windows hidden z-30 shadow-2xl absolute border bg-base-300">
+    <div class="select-none mockup-window-title bg-blue-500 h-10">
+      <div class="flex">
+        <h2 class="text-lg text-white self-end">
+          <i class="fi fi-rr-user m-3"></i>患者信息
+        </h2>
+        <div class="text-white flex justify-end flex-1">
+          <div class="mockup-window-mini align-bottom btn btn-sm w-12 btn-ghost rounded-none">
+            <span class="font-thin text-2xl -scale-x-150">-</span>
+          </div>
+          <div class="mockup-window-max align-bottom btn btn-sm w-12 btn-ghost rounded-none">
+            <span class="font-thin -scale-x-150">🞐</span>
+          </div>
+          <div class="mockup-window-close align-bottom btn btn-sm hover:bg-red-500 w-12 btn-ghost rounded-none">
+            <span class="font-thin -scale-x-150">x</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="select-none flex h-full justify-center px-4 py-4 bg-base-200">
+      <div class="overflow-y-scroll card card-side bg-base-100 shadow-xl">
+        <div class="card-body">
+          <div class="notprintable divider">个人信息</div>
+          <div class="flex">
+            <div class="avatar m-5">
+              <div class="text-8xl">
+                <i id="man-face" class="fi fi-rr-man-head" alt="头像"></i>
+                <i id="woman-face" class="hidden fi fi-rr-woman-head" alt="头像"></i>
+                <span class="block absolute -bottom-4 left-8 text-xs">头像</span>
+              </div>
+            </div>
+            <div class="flex-1 w-28 inline-block">
+              <label class="label">
+                <span class="label-text">姓名</span>
+              </label>
+              <input id="patient-name" class="input-patient w-28" type="text" />
+            </div>
+            <div class="flex-1 w-28 inline-block">
+              <label class="label">
+                <span class="label-text">性别</span>
+              </label>
+              <select id="patient-gender" class="input-patient w-28" type="text">
+                <option>男</option>
+                <option>女</option>
+              </select>
+            </div>
+            <div class="flex-1 w-28 inline-block">
+              <label class="label">
+                <span class="label-text">年龄</span>
+              </label>
+              <input id="patient-age" class="input-patient w-28" type="number" />
+            </div>
+            <div class="flex-1 w-28 inline-block">
+              <label class="label">
+                <span class="label-text">体重(KG)</span>
+              </label>
+              <input id="patient-weight" class="input-patient w-28" type="number" step="0.5" />
+            </div>
+            <div class="flex-1 w-48 inline-block">
+              <label class="label">
+                <span class="label-text">联系方式</span>
+              </label>
+              <input id="patient-phone" class="input-patient w-48" type="text" />
+            </div>
+            <div class="flex-1 w-48 inline-block">
+              <label class="label">
+                <span class="label-text">家属联系方式</span>
+              </label>
+              <input id="patient-parent-phone" class="input-patient w-48" type="text" />
+            </div>
+          </div>
+          <div class="flex">
+            <div class="flex-1 w-56 mr-5 inline-block">
+              <label class="label">
+                <span class="label-text">身份证号码</span>
+              </label>
+              <input id="patient-id" class="input-patient w-56" type="text" />
+            </div>
+            <button id="btn-save-patient" class="notprintable w-32 self-end btn btn-info">
+              提交
+            </button>
+          </div>
+          <div id="view-disease-record-history">
+            <div class="notprintable divider">历史病例</div>
+            <div class="notprintable overflow-x-auto">
+              <table class="table">
+                <!-- head -->
+                <thead>
+                  <tr>
+                    <th>病例ID</th>
+                    <th>主治医生</th>
+                    <th>护士</th>
+                    <th>症状</th>
+                    <th>诊断</th>
+                    <th>是否拍片</th>
+                    <th>是否住院</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="table-disease-record"></tbody>
+              </table>
+            </div>
+            <div id="btn-add-disease-record" class="notprintable btn btn-primary w-2/12 self-end">
+              添加新病例
+            </div>
+
+            <div id="view-disease-record" class="hidden">
+              <div class="notprintable divider"></div>
+              <div class="flex">
+                <div class="self-center flex-1 inline-block">
+                  <label class="label">
+                    <span class="label-text">门诊医生</span>
+                  </label>
+                  <input id="MZdocter" class="input-patient w-28" type="text" />
+                </div>
+                <div class="self-center flex-1 inline-block">
+                  <label class="label">
+                    <span class="label-text">主治医生</span>
+                  </label>
+                  <input id="docter" class="input-patient w-28" type="text" />
+                </div>
+                <div class="self-center flex-1 inline-block">
+                  <label class="label">
+                    <span class="label-text">负责护士</span>
+                  </label>
+                  <input id="nurse" class="input-patient w-28" type="text" />
+                </div>
+                <div class="flex-1 self-center inline-block">
+                  <span class="label-text align-super">是否需要拍片</span>
+                  <input id="needImage" type="checkbox" checked="checked" class="mx-5 checkbox checkbox-primary" />
+                </div>
+                <div class="flex-1 self-center inline-block">
+                  <span class="label-text align-super">是否住院</span>
+                  <input id="inHospital" type="checkbox" checked="checked" class="mx-5 checkbox checkbox-secondary" />
+                </div>
+                
+                <div id="ct-image" class="self-center flex-1 inline-block notprintable">
+                  <button id="btn-image" class="block btn btn-success">
+                    拍片  
+                  </button>
+                </div>
+              </div>
+              <div class="notprintable divider"></div>
+              <div>
+                <label class="label">
+                  <span class="label-text">发病症状</span>
+                </label>
+                <textarea id="symptom"
+                  class="border border-slate-600 border-solid w-full h-52 textarea inline-block"></textarea>
+              </div>
+              <div class="notprintable divider"></div>
+              <div>
+                <label class="label">
+                  <span class="label-text">医生诊断</span>
+                </label>
+                <textarea id="diagnosis"
+                  class="border border-slate-600 border-solid w-full h-52 textarea inline-block"></textarea>
+              </div>
+
+
+              <button id="btn-save-record" class="notprintable w-32 float-right btn btn-info">
+                提交
+              </button>
+              <button id="btn-print-record" class="notprintable w-32 float-right btn btn-accent mr-4">
+                打印
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <input id="upload-label-input" type="file" class="hidden" accept=".nii,.nii.gz,.mhd,.raw,.dcm" />
+
+  <dialog id="addpatient" class="modal">
+    <form method="dialog" class="modal-box">
+      <h3 class="font-bold text-xl text-center">请刷患者医疗卡</h3>
+      <img class="mt-5" alt="ok" src="assets/shua-card.jpg" />
+
+      <div class="modal-action">
+        <button id="btn-added-patient" class="btn">刷卡</button>
+      </div>
+    </form>
+  </dialog>
+
+
+
+  <dialog id="scanimage" class="modal">
+    <form method="dialog" class="modal-box">
+      <h3 class="font-bold text-xl text-center">请拍片</h3>
+      <img class="mt-5" alt="ok" src="assets/scan-image.png" />
+
+      <div class="modal-action">
+        <button id="btn-scan-image" class="btn">拍片</button>
+      </div>
+    </form>
+  </dialog>
+  <input type="checkbox" id="confirm-connect-error" class="modal-toggle" />
+
+  <div class="modal z-[9999]">
+    <div class="modal-box">
+      <h3 class="font-bold text-xl text-red-600">连接失败</h3>
+      <p class="py-4">请检查网络连接</p>
+      <p class="py-4">检查模型配置是否正确</p>
+      <div class="modal-action">
+        <label for="confirm-connect-error" class="btn px-8 mx-2 btn-primary">确定</label>
+      </div>
+    </div>
+  </div>
+
+  <div id="alert"
+    class="alert z-[1000] transition-all duration-1000 alert-success shadow-lg absolute w-64 -top-20 left-0 right-0 mx-auto">
+    <div>
+      <span>上传成功</span>
+    </div>
+  </div>
+  <input type="checkbox" id="confirm-data-delete" class="modal-toggle" />
+
+  <div class="modal">
+    <div class="modal-box">
+      <h3 class="font-bold text-xl text-red-600">你真的要删除数据吗?</h3>
+      <div class="modal-action">
+        <label for="confirm-data-delete" id="confirm-delete-btn" class="btn px-8 mx-6 btn-error btn-outline">确定</label>
+        <label for="confirm-data-delete" class="btn px-8 mx-6 btn-primary">取消</label>
+      </div>
+    </div>
+  </div>
+
+  <input type="checkbox" id="upload-data" class="modal-toggle" />
+
+  <div class="modal">
+    <div class="modal-box">
+      <label for="upload-data" class="btn btn-outline btn-primary btn-sm btn-circle absolute right-4 top-4">✕</label>
+
+      <h3 class="font-bold text-xl">上传数据</h3>
+
+      <label class="label mb-6 cursor-pointer">
+        <span class="label-text">生成标签
+          <div class="tooltip tooltip-right" data-tip="开启生成标签后，将会直接将输入的文件输入到模型生成对应的标签。">
+            <i class="fi fi-rs-interrogation"></i>
+          </div>
+        </span>
+
+        <input type="checkbox" id="data-infer-checkbox" class="transition-all toggle" checked />
+      </label>
+      <input id="upload-data-input" type="file" class="hidden" multiple accept=".nii,.nii.gz,.mhd,.raw,.dcm" />
+      <div class="btn btn-info mr-2" id="select-data-btn">选择文件</div>
+      <div class="cursor-not-allowed inline-block">
+        <div class="btn btn-warning btn-disabled" id="clear-upload-data-btn">
+          清除文件
+        </div>
+      </div>
+      <div class="cursor-not-allowed inline-block float-right">
+        <div class="btn btn-primary btn-disabled" id="upload-data-btn">
+          开始上传
+        </div>
+      </div>
+      <div class="overflow-x-auto my-6">
+        <table class="table table-compact w-full">
+          <thead>
+            <tr>
+              <th></th>
+              <th class="text-center">
+                名称
+              </th>
+              <th class="text-center">文件大小</th>
+              <th class="text-center">文件类型</th>
+              <th class="text-center">操作</th>
+            </tr>
+          </thead>
+          <tbody id="upload-data-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="drawers" class="drawer">
+    <input id="drawer" type="checkbox" class="drawer-toggle" />
+    <div class="drawer-content flex flex-col">
+      <!-- Navbar -->
+      <div class="w-full navbar bg-base-300"></div>
+      <!-- 主页 -->
+      <div class="view-tab hidden" id="root-tab">
+        <div class="flex">
+          <div class="flex-1 mr-4 card w-96 bg-base-100 shadow-xl">
+            <figure><img alt="Data" src="assets/patient-manager.jpg" /></figure>
+            <div class="card-body">
+              <h2 class="card-title">患者管理</h2>
+              <p>实现自动录入患者信息、查看历史病例、手动修改信息以及添加新病例。患者管理界面展示基本信息，并提供筛选与排序功能，方便医生查找特定患者。此系统有助于提高医疗服务质量，实现更高效的患者信息管理与诊断评估。
+              </p>
+              <div class="card-actions justify-end">
+                <button id="btn-goto-patient" class="btn btn-primary">→</button>
+              </div>
+            </div>
+          </div>
+          <div class="flex-1 ml-4 card w-96 bg-base-100 shadow-xl">
+            <figure><img alt="Data" src="assets/data-manager.png" /></figure>
+            <div class="card-body">
+              <h2 class="card-title">数据管理</h2>
+              <p>实现导入影像数据、查看历史影像、可以跳转到对应患者的页面，可以修改标签，下载到本地。优化模型。可以手动上传本地的标签。</p>
+              <div class="card-actions justify-end">
+                <button id="btn-goto-data" class="btn btn-primary">→</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="m-[0!important] view-tab hidden" id="dashboard-tab">
+        <div class="flex">
+          <div class="flex-1 flex flex-col">
+            <div class="w-80">
+              <div class="stats shadow">
+
+                <div class="stat">
+                  <div class="stat-figure text-secondary">
+                    <i class="fi fi-rr-user text-2xl"></i>
+                  </div>
+                  <div class="stat-title">门诊人数</div>
+                  <div class="stat-value">31000</div>
+                  <div class="stat-desc">6月11日-7月11日</div>
+                </div>
+
+                <div class="stat">
+                  <div class="stat-figure text-secondary">
+                    <i class="fi fi-rr-camera"></i>
+                  </div>
+                  <div class="stat-title">拍片人数</div>
+                  <div class="stat-value">4200</div>
+                  <div class="stat-desc">↗︎ 400 (22%)</div>
+                </div>
+
+                <div class="stat">
+                  <div class="stat-figure text-secondary">
+                    <i class="fi fi-rr-calendar"></i>
+                  </div>
+                  <div class="stat-title">病例个数</div>
+                  <div class="stat-value">1,200</div>
+                  <div class="stat-desc">↘︎ 90 (14%)</div>
+                </div>
+
+              </div>
+              <!-- 门诊接入科室比例饼图 -->
+              <div id="pie-chart" class="w-80 h-44 rounded p-4"></div>
+              <p class="text-center">门诊接入科室比例</p>
+            </div>
+            <div>
+              <!-- 上个月到这个月的门诊人数变化 -->
+              <div class="w-80">
+                <div id="line-chart" class="w-80 h-64 rounded p-4"></div>
+                <p class="text-center">门诊人数变化</p>
+              </div>
+            </div>
+           
+          </div>
+          <div class="flex-1 flex flex-col">
+            <div>
+              <img src="assets/human-body.png" class="hidden" id="mask" alt="body" />
+              <div id="wordcloud" class="z-10 w-[30rem] h-[40rem]"></div>
+              <p class="text-center">诊断病症词云图</p>
+            </div>
+          </div>
+          <div class="flex-1 flex flex-col">
+            <!-- 拍片人数上周到这周的人数变化 -->
+            <div class="w-64">
+              <div id="film-line-chart" class="w-64 h-60 rounded p-4"></div>
+              <p class="text-center">拍片人数变化</p>
+            </div>
+
+            <!-- 需要拍片的病症 Top 10 -->
+            <div id="film-bar-chart" class="w-80 h-64 rounded p-4"></div>
+            <p class="text-center">拍片次数最多的病症</p>
+
+          </div>
+          <!-- Top 10 诊断病症条状图 -->
+          <div class="w-80">
+            <div id="bar-chart" class="w-64 h-60 rounded p-4"></div>
+            <p class="text-center">诊断病症</p>
+          </div>
+          <div>
+            
+          </div>
+        </div>
+      </div>
+      <!-- 患者 -->
+      <div class="overflow-x-scroll view-tab hidden" id="patient-tab">
+        <div class="flex">
+          <div class="btn btn-success" id="btn-add-patient">添加患者</div>
+          <div class="flex-1 justify-end flex items-center">
+            <div class="dropdown dropdown-end dropdown-hover">
+              <label tabindex="0" class="btn btn-outline m-1"><i class="fi fi-rr-filter"></i>筛选与排序</label>
+              <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box">
+                <li>
+                  <form id="search-patient-name" action="/"
+                    class="active:bg-[unset!important] active:text-[unset!important]">
+                    <input id="input-search-patient-name" class="input w-full max-w-xs" type="text"
+                      placeholder="搜索患者姓名" />
+                    <button type="submit" class="btn btn-success btn-square">
+                      <i class="fi fi-rr-search"></i>
+                    </button>
+                  </form>
+                </li>
+                <li>
+                  <a class="active:bg-[unset!important] active:text-[unset!important]">
+                    按照年龄排序
+
+                    <div class="flex justify-end">
+                      <div class="active-filter">
+                        <i class="invisible fi fi-rr-circle"></i>
+                      </div>
+                      <label class="filter-enable align-middle swap swap-rotate mr-2">
+                        <input id="order-patient-age" type="checkbox" checked />
+                        <i class="text-success swap-on fi fi-br-caret-down translate-y-2 rotate-0"></i>
+                        <i class="text-success swap-off fi fi-br-caret-down -translate-y-2 rotate-180"></i>
+                      </label>
+                      <i class="text-success filter-disable align-middle relative fi fi-br-cross"></i>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a class="active:bg-[unset!important] active:text-[unset!important]">
+                    按照修改时间排序
+
+                    <div class="flex justify-end">
+                      <div class="active-filter">
+                        <i class="invisible fi fi-rr-circle"></i>
+                      </div>
+                      <label class="filter-enable align-middle swap swap-rotate mr-2">
+                        <input id="order-edit-time" type="checkbox" checked />
+                        <i class="text-success swap-on fi fi-br-caret-down translate-y-2 rotate-0"></i>
+                        <i class="text-success swap-off fi fi-br-caret-down -translate-y-2 rotate-180"></i>
+                      </label>
+                      <i class="text-success filter-disable align-middle relative fi fi-br-cross"></i>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="refresh-patient-btn btn btn-base text-base btn-outline mr-2">
+              ⭯ 刷新
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table class="w-full table">
+            <thead>
+              <tr class="bg-base-300">
+                <th>患者序号</th>
+                <th>患者姓名</th>
+                <th>年龄</th>
+                <th>性别</th>
+                <th>修改时间</th>
+                <th>联系方式</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="patient-table"></tbody>
+          </table>
+        </div>
+      </div>
+      <!-- 医疗数据 -->
+      <div class="view-tab hidden" id="data-tab">
+        <div id="data-left-btn" class="inline invisible">
+          <label for="confirm-data-delete" class="btn btn-base text-base btn-outline btn-error">🗑 删除</label>
+        </div>
+
+        <div class="inline float-right">
+          <a class="refresh-btn btn btn-base text-base btn-outline mr-2">⭯ 刷新</a>
+
+          <label for="upload-data" class="btn btn-base text-base btn-primary">📁 导入数据</label>
+        </div>
+        <div class="divider"></div>
+        <div class="py-6 overflow-x-auto w-full border-2 border-gray-300 bg-base-200">
+          <table id="data-tables" class="table w-full">
+            <!-- head -->
+            <thead>
+              <tr>
+                <th>
+                  <label>
+                    <input id="data-checkbox--1" type="checkbox"
+                      class="checkbox-sm data-checkbox checkbox transition-all" />
+                  </label>
+                </th>
+                <th>ID</th>
+                <th>预览</th>
+                <th>相关信息</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="data-table"></tbody>
+            <div id="data-table-empty-tip"
+              class="cursor-not-allowed select-none absolute z-50 left-0 right-0 my-10 text-2xl text-center">
+              没有数据，请点击导入数据添加。
+            </div>
+            <!-- foot -->
+            <tfoot>
+              <tr>
+                <th>
+                  <label>
+                    <input id="data-checkbox--2" type="checkbox" class="checkbox-sm data-checkbox checkbox" />
+                  </label>
+                </th>
+                <th>ID</th>
+                <th>预览</th>
+                <th>相关信息</th>
+                <th></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="block stickty drawer-side shadow-2xl">
+      <label for="drawer" class="drawer-overlay"></label>
+      <ul class="flex-1 py-4 px-5 menu w-80 h-[90%] bg-base-200">
+        <div class="flex">
+          <div id="btn-goto-home" class="self-start btn btn-ghost">
+            <span class="text-2xl">3D智慧</span>
+            <span class="text-2xl bg-primary rounded-xl p-1">医疗平台</span>
+          </div>
+          <a href="#" class="link link-hover select-none self-center text-xs">
+            1.0.0
+          </a>
+        </div>
+        <div>
+          <li class="mt-3">
+            <a class="drawer-tab" id="root-drawer"><i class="text-lg mt-1 mr-2 stroke-current fi fi-rr-home"></i>主页</a>
+          </li>
+          <li>
+            <a class="drawer-tab" id="dashboard-drawer"><i
+                class="text-lg mt-1 mr-2 stroke-current fi fi-rr-dashboard"></i>仪表盘</a>
+          </li>
+        </div>
+        <div class="divider m-3"></div>
+        <div class="menu-title flex flex-row gap-4">
+          <i class="text-fuchsia-600 fi fi-rr-list-check"></i> 操作
+        </div>
+        <li>
+          <a class="drawer-tab" id="patient-drawer">患者管理</a>
+        </li>
+
+        <li>
+          <a class="drawer-tab" id="data-drawer">数据管理</a>
+        </li>
+        <div class="divider m-3"></div>
+      </ul>
+      <div class="w-80 h-[10%] text-left pt-5 pl-4 border-t bg-base-100 border-slate-400">
+        <label class="swap swap-flip">
+          <input data-toggle-theme="light,dark" data-act-class="ACTIVECLASS" id="checkbox-darkmode" type="checkbox" />
+          <i class="swap-off text-4xl w-10 h-10 fi fi-rr-brightness"></i>
+          <i class="swap-on text-4xl w-10 h-10 fi fi-rr-moon-stars"></i>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div id="btn-task" class="transition-all fixed bottom-6 right-[-200px]">
+    <button id="floatingButton" class="btn btn-primary btn-lg shadow-2xl btn-circle">
+      <i class="fi fi-rr-calendar"></i>
+    </button>
+    <div id="taskList"
+      class="bg-base-100 overflow-y-scroll  h-96 hidden absolute right-0 bottom-20 w-[30rem] shadow-2xl rounded-lg p-4">
+      <h2 class="text-xl font-bold mb-4">任务列表</h2>
+      <table class="table w-full">
+        <thead>
+          <tr>
+            <th>任务ID</th>
+            <th>任务名称</th>
+            <th>任务状态</th>
+            <th>任务进度</th>
+          </tr>
+        </thead>
+        <tbody id="task-table">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+
+</html>
